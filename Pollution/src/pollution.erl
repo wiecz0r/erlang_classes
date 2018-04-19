@@ -11,7 +11,7 @@
 
 %% API
 -export([createMonitor/0, addStation/3, addValue/5,removeValue/4,
-  getOneValue/4,getStationMean/3,getDailyMean/3,getMaximumVariationStation/2]).
+  getOneValue/4,getStationMean/3,getDailyMean/3,getMaximumVariationStation/2,dayFromDate/1]).
 
 -record(station, {name="", xy, measurements=#{}}).
 -record(measurement, {type, value, date}).
@@ -133,8 +133,12 @@ getMaximumVariationStation(Type,Monitor) ->
     end
                end,
   {Val,Name} =maps:fold(HighLowAll,{0,""},Mapped),
-  io:format("Najwieksza roznica wynosi ~w dla stacji ~s~n",[Val,Name]),
-  {Val,Name}.
+  case Val == 0 of
+    true -> 0;
+    false ->
+      io:format("Najwieksza roznica wynosi ~w dla stacji ~s~n",[Val,Name]),
+      {Val,Name}
+  end.
 
 
 dayFromDate(Date) ->
